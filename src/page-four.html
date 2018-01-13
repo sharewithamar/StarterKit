@@ -77,7 +77,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </iron-form>
 
     <iron-ajax
-    auto
+   id="myajax"   
     url="https://jsonplaceholder.typicode.com/posts"
     handle-as="json"
     on-response="handleResponse"
@@ -135,7 +135,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pastry,
         size
     }
-
+    //ajax post 
+    this.$.myajax.body=formObj;
+     //this.$.myajax.generateRequest();
+   this.formValues= f
   console.log("My form values",formObj);
   //      document.getElementById('iron-form').submit();
 
