@@ -16,6 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
 
 
@@ -37,39 +38,109 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       <div class="circle">4</div>
       <h1>Use Paper Elements</h1>
-      
-      <paper-input required auto-validate error-message="needs some text!" label="Input label"></paper-input>
-      <paper-dropdown-menu label="Your favourite pastry">
-        <paper-listbox slot="dropdown-content">
-          <paper-item>Idly</paper-item>
+      <iron-form>
+        <form>
+
+
+      <paper-input id="firstname" name="firstname" required auto-validate error-message="needs some text!" value="{{firstName}}" label="Your Name"></paper-input>
+      <paper-dropdown-menu id="pastry" name="pastry" label="Your favourite pastry">
+        <paper-listbox   slot="dropdown-content">
+           <!-- <paper-item>Idly</paper-item>
           <paper-item>Dosa</paper-item>
           <paper-item>Vada</paper-item>
-          <paper-item>Meals</paper-item>
+          <paper-item>Meals</paper-item>  -->
+
+           <template is="dom-repeat" items="{{pastry}}">
+                <paper-item noink value="item.index">{{item}} </paper-item>
+         
+        </template> 
+
         </paper-listbox>
       </paper-dropdown-menu>
       <div>
-        <paper-checkbox>Favorite</paper-checkbox>
+        <paper-checkbox  id="favorite" name="favorite" checked="{{favorite}}">Favorite</paper-checkbox>
 
       </div>
       <div>
-        <paper-radio-group selected="small">
-            <paper-radio-button name="small">Small</paper-radio-button>
-            <paper-radio-button name="medium">Medium</paper-radio-button>
-            <paper-radio-button name="large">Large</paper-radio-button>
+        <paper-radio-group name="size" id="size">
+            <paper-radio-button name="small" value="small">Small</paper-radio-button>
+            <paper-radio-button name="medium" value="medium">Medium</paper-radio-button>
+            <paper-radio-button name="large" value="large">Large</paper-radio-button>
           </paper-radio-group>
       </div>
 
       <div>
-        <paper-button raised>Submit</paper-button>
+        <paper-button  type="submit" id="submit" raised on-click="onSubmit">Submit</paper-button>
 
       </div>
+      </form>
+    </iron-form>
 
+    <iron-ajax
+    auto
+    url="https://jsonplaceholder.typicode.com/posts"
+    handle-as="json"
+    on-response="handleResponse"
+   ></iron-ajax>
     </div>
   </template>
 
   <script>
     class MyView4 extends Polymer.Element {
       static get is() { return 'page-four'; }
+      static get properties() {
+      return {
+       
+            firstName: {
+          type: String,
+          value:"Amar"
+        },
+        pastry:{
+            type: Array,
+            value:[
+            "Idly","Dosa","Vada","Meals"
+            ]
+        },
+        favorite:{
+            type: Boolean,
+            value:true
+        },
+        size:{
+            type: Array,
+            value:[
+            "small",
+            "medium",
+            "large"
+            ]
+        }
+      
+      
+      }
+    }
+    handleResponse(response)
+    {
+        console.log(response.detail.__data.response);
+    }
+    onSubmit(){
+    console.log("Amar");
+ 
+    let firstname =this.$.firstname.value;
+    let favorite = this.$.favorite.checked;
+    let pastry=  this.$.pastry.value;
+    let size =this.$.size.selected;
+
+    var formObj= {
+        firstname,
+        favorite,
+        pastry,
+        size
+    }
+
+  console.log("My form values",formObj);
+  //      document.getElementById('iron-form').submit();
+
+
+    }
     }
 
     window.customElements.define(MyView4.is, MyView4);
