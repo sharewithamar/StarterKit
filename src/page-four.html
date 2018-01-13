@@ -16,9 +16,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 
-<link rel="import" href="../bower_components/vaadin-grid/vaadin-grid.html">
 
 
 
@@ -41,7 +42,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       <div class="circle">4</div>
       <h1>Use Paper Elements</h1>
-      <iron-form>
+   
+      <iron-form id="dangerform">
+            <iron-ajax
+            id="myajax"   
+             url="https://jsonplaceholder.typicode.com/posts"
+             handle-as="json"
+             on-response="handleResponse"
+            ></iron-ajax>
         <form>
 
 
@@ -79,12 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </form>
     </iron-form>
 
-    <iron-ajax
-   id="myajax"   
-    url="https://jsonplaceholder.typicode.com/posts"
-    handle-as="json"
-    on-response="handleResponse"
-   ></iron-ajax>
+
     </div>
   </template>
 
@@ -125,7 +128,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         console.log(response.detail.__data.response);
     }
     onSubmit(){
+  // var v = this.$.ironform.validate();
+  console.log(this.$.dangerform.validate());
     console.log("Amar");
+
  
     let firstname =this.$.firstname.value;
     let favorite = this.$.favorite.checked;
@@ -141,7 +147,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     //ajax post 
     this.$.myajax.body=formObj;
      //this.$.myajax.generateRequest();
-   this.formValues= f
+   this.formValues= formObj;
   console.log("My form values",formObj);
   //      document.getElementById('iron-form').submit();
 
