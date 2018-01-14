@@ -26,6 +26,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <div class="circle">3</div>
+      <paper-button id="back" raised on-click="goback">goback to 4</paper-button>
+
       <highcharts-chart type="spline" data='{{chartdata}}' title='Test-Spline Chart' x-zoom x-label="Iterations" y-label="Awesomeness Index"></highcharts-chart>
       <!-- <highcharts-chart id="pieChart" type="pie" color-by-point="" data="[{&quot;name&quot;:&quot;Mary&quot;, &quot;y&quot;: 36.3},{&quot;name&quot;:&quot;Davis&quot;, &quot;y&quot;:60},{&quot;name&quot;:&quot;John&quot;, &quot;y&quot;:13.6}]" label="Work" subtitle="Ctrl-Click to Select Multiple Elements" class="x-scope highcharts-chart-0"> -->
       <google-chart
@@ -52,6 +54,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }
 
+      }
+      goback()
+      {
+        window.history.back();
       }
 
 

@@ -40,7 +40,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <div class="circle">4</div>
+      <div class="circle">4
+      </div>
+      <paper-button id="navigate" raised on-click="navigate">Navigate to 3</paper-button>
+
       <h1>Use Paper Elements</h1>
    
       <iron-form id="dangerform">
@@ -126,6 +129,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     handleResponse(response)
     {
         console.log(response.detail.__data.response);
+    }
+    navigate()
+    {
+      window.history.pushState({},null,'/three');
+      window.location.href="three";
     }
     onSubmit(){
   // var v = this.$.ironform.validate();
