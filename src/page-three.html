@@ -10,6 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/highcharts-chart/highcharts-chart.html">
+<link rel="import" href="../bower_components/google-chart/google-chart.html">
+
 
 <dom-module id="page-three">
   <template>
@@ -23,15 +26,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <div class="card">
       <div class="circle">3</div>
-      <h1>Kohli</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
+      <highcharts-chart type="spline" data='{{chartdata}}' title='Test-Spline Chart' x-zoom x-label="Iterations" y-label="Awesomeness Index"></highcharts-chart>
+      <!-- <highcharts-chart id="pieChart" type="pie" color-by-point="" data="[{&quot;name&quot;:&quot;Mary&quot;, &quot;y&quot;: 36.3},{&quot;name&quot;:&quot;Davis&quot;, &quot;y&quot;:60},{&quot;name&quot;:&quot;John&quot;, &quot;y&quot;:13.6}]" label="Work" subtitle="Ctrl-Click to Select Multiple Elements" class="x-scope highcharts-chart-0"> -->
+      <google-chart
+      id="mutating-chart"
+      type="column"
+      options='{"title": "Random data",
+                "vAxis": {"minValue" : 0, "maxValue": 10},
+                "animation": {"duration": "1000"}}'
+      cols='[{"label": "Data", "type": "string"},{"label": "Value", "type": "number"}]'
+      rows='[ ["Col1", 5.0],["Col2", 5.0],["Col3", 5.0] ]'>
+    
+    </google-chart>
     </div>
   </template>
 
   <script>
     class MyView3 extends Polymer.Element {
       static get is() { return 'page-three'; }
+      static get properties (){
+        return {
+          chartdata: {
+            type:Array,
+            value:[[0,0],[1,8],[2,1],[3,6],[4,8],[5,6]]
+          }
+        }
+
+      }
+
+
     }
 
     window.customElements.define(MyView3.is, MyView3);

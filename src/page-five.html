@@ -1,0 +1,150 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<script src="../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-checkbox/paper-checkbox.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/iron-demo-helpers/demo-pages-shared-styles.html">
+<link rel="import" href="../bower_components/neon-animation/web-animations.html">
+<link rel="import" href="../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<style>
+  paper-input {
+    max-width: 400px;
+    margin: auto;
+  }
+  iron-icon, div[suffix] {
+    color: hsl(0, 0%, 50%);
+    margin-right: 12px;
+  }
+  paper-checkbox {
+    font-family: 'Roboto', sans-serif;
+    margin: 24px;
+  }
+    
+  paper-checkbox:first-child {
+    --primary-color: #ff5722;
+  }
+  
+  paper-checkbox.styled {
+    align-self: center;
+    border: 1px solid var(--paper-green-200);
+    padding: 8px 16px;
+    --paper-checkbox-checked-color: var(--paper-green-500);
+    --paper-checkbox-checked-ink-color: var(--paper-green-500);
+    --paper-checkbox-unchecked-color: var(--paper-green-900);
+    --paper-checkbox-unchecked-ink-color: var(--paper-green-900);
+    --paper-checkbox-label-color: var(--paper-green-500);
+    --paper-checkbox-label-spacing: 0;
+    --paper-checkbox-margin: 8px 16px 8px 0;
+    --paper-checkbox-vertical-align: top;
+  }
+  paper-checkbox .subtitle {
+    display: block;
+    font-size: 0.8em;
+    margin-top: 2px;
+    max-width: 150px;
+  }
+  paper-dropdown-menu, paper-listbox {
+    width: 250px;
+  }
+  paper-dropdown-menu {
+    height: 200px;
+    margin: auto;
+    display: block;
+  }
+</style>
+
+
+<dom-module id="page-five">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">5</div>
+      <h1>Form Page</h1>
+      <iron-form id="form1">
+      <form>
+            <paper-input always-float-label required auto-validate error-message="needs some text!" label="Floating label" name="fullname" id="fullname" value="{{person.fullname}}"></paper-input> <br />  <br />
+            <paper-input label="username" required auto-validate name="username" value="{{person.username}}">
+              <iron-icon icon="mail" slot="prefix"></iron-icon>
+              <div slot="suffix">@email.com</div>
+            </paper-input> <br /> <br />
+            <paper-checkbox name="checks[]" on-change="checkboxChanged" value="checkbox1">Checked</paper-checkbox>
+            <paper-checkbox class="styled" name="checks[]" value="checkbox2" on-change="checkboxChanged">
+              Checkbox
+              <span class="subtitle">
+                With a longer label
+              </span>
+            </paper-checkbox>
+            <paper-checkbox disabled name="checks[]">Disabled</paper-checkbox> <br /> <br />
+            <paper-dropdown-menu label="Dinosaurs" required auto-validate name="dinosaurs" id="dinosaurs"  on-iron-select="_itemSelected">
+                <paper-listbox slot="dropdown-content" >
+                    <paper-item value="allosaurus">allosaurus</paper-item>
+                    <paper-item value="brontosaurus">brontosaurus</paper-item>
+                    <paper-item value="carcharodontosaurus">carcharodontosaurus</paper-item>
+                    <paper-item value="diplodocus">diplodocus</paper-item>
+                </paper-listbox>
+            </paper-dropdown-menu><br /> <br />
+            <paper-button raised on-click="submit">Submit</paper-button>
+            <paper-button raised on-click="reset">Reset</paper-button>
+      </form>
+    </iron-form>
+    <iron-ajax id="postPerson"
+        method="POST"
+        body='{{person}}'    
+        handle-as="json"
+        content-type="application/json"
+        on-response="serverSuccessCb"
+        last-response="{{serverSuccessObj}}"
+        on-error="serverErrorCb"
+        last-error="{{serverErrorObj}}"
+        url="https://jsonplaceholder.typicode.com/posts">
+    </iron-ajax>
+    </div>
+  </template>
+
+  <script>
+    class HawkForm extends Polymer.Element {
+      static get is() { return 'page-five'; }
+      static get properties() {
+        return {
+            person: {
+                type: Object,
+                value:{}
+            }
+        };
+      }
+      _itemSelected(e) {
+        var selectedItem = e.target.selectedItem;
+        if (selectedItem) {
+            this.person.dinosaurs = selectedItem.getAttribute('value');
+        }
+      }
+      checkboxChanged(e){
+          this.person.checks = (this.person.checks) ? this.person.checks : [];
+          if(e.target.checked) {
+            this.person.checks.push(e.target.value);
+          } else {
+            const index = this.person.checks.indexOf(element);
+            this.person.checks.splice(index, 1);
+          }
+      }
+      submit() {
+          if(this.$.form1.validate()) {
+            this.$.postPerson.generateRequest();
+          }
+      }
+    }
+    window.customElements.define(HawkForm.is, HawkForm);
+  </script>
+</dom-module>
